@@ -7,7 +7,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.concurrent.thread
 import org.json.JSONObject
-import kotlin.math.log
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,18 +24,20 @@ class LoginActivity : AppCompatActivity() {
 
             thread {
                 try {
-                    val response = Api.post("http://10.0.2.2:5001/api/auth", mapOf(
-                        "email" to editEmail.text.toString(),
-                        "password" to editPassword.text.toString()
-                    ))
+                    // Kirim permintaan login
+                    val response = Api.testes("http://10.0.2.2:5001/api/auth", email, password)
 
+                    Log.e("RESPONSE_RAW", response) // Debug: cek response dari server
+
+                    // Coba parse ke JSONObject
                     val json = JSONObject(response)
 
                     runOnUiThread {
+                        Log.e("TAG", json.toString())
+
                         if (json.has("id")) {
                             textStatus.text = "Login berhasil! Selamat datang, ${json.getString("name")}"
 
-                            // Simpan data user ke intent, SharedPreferences, atau langsung ke MainActivity
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             intent.putExtra("user_id", json.getInt("id"))
                             intent.putExtra("user_name", json.getString("name"))

@@ -18,10 +18,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val token = intent.getStringExtra("token")
 
-        val textView = TextView(this)
-        textView.text = "login berhasil $token"
-        setContentView(textView)
     }
 }
